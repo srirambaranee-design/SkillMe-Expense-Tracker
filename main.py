@@ -7,13 +7,13 @@ def load_expenses(path):
     with open(path, "r", newline="", encoding="utf-8-sig") as file:
         reader = csv.DictReader(file)
 
-
         for row in reader:
-
             row["Amount"] = float(row["Amount"])
             expenses.append(row)
 
     return expenses
+
+
 def totals_by_category(expenses):
     totals = {}
 
@@ -22,19 +22,22 @@ def totals_by_category(expenses):
         amount = expense["Amount"]
 
         if category in totals:
-            totals[category] = totals[category] + amount
+            totals[category] += amount
         else:
             totals[category] = amount
 
     return totals
 
+
 def total_spent(expenses):
     total = 0
 
     for expense in expenses:
-        total = total + expense["Amount"]
+        total += expense["Amount"]
 
     return total
+
+
 def biggest_expense(expenses):
     biggest = expenses[0]
 
@@ -48,7 +51,6 @@ def biggest_expense(expenses):
 data = load_expenses("data/expenses.csv")
 
 
-
 while True:
     print("\n===== EXPENSE TRACKER =====")
     print("1. Show all expenses")
@@ -59,15 +61,16 @@ while True:
     choice = input("Enter your choice: ")
 
     if choice == "1":
-        print("\n{:<15} {:<18} {:>10}".format(
-            "DATE", "CATEGORY", "AMOUNT"
+        print("\n{:<12} {:<16} {:<22} {:>10}".format(
+            "DATE", "CATEGORY", "DESCRIPTION", "AMOUNT"
         ))
-        print("-" * 45)
+        print("-" * 63)
 
         for expense in data:
-            print("{:<15} {:<18} {:>10.2f}".format(
+            print("{:<12} {:<16} {:<22} {:>10.2f}".format(
                 expense["Date"],
                 expense["Category"],
+                expense["Description"],
                 expense["Amount"]
             ))
 
@@ -82,21 +85,19 @@ while True:
             print("{:<20} {:>12.2f}".format(category, amount))
 
         print("-" * 33)
+        print("{:<20} {:>12.2f}".format(
+            "OVERALL TOTAL", total_spent(data)
+        ))
 
     elif choice == "3":
         print("\n===== BIGGEST EXPENSE =====")
-        print("{:<15} {:<18} {:>10}".format(
-            "DATE", "CATEGORY", "AMOUNT"
-        ))
-        print("-" * 45)
 
         biggest = biggest_expense(data)
 
-        print("{:<15} {:<18} {:>10.2f}".format(
-            biggest["Date"],
-            biggest["Category"],
-            biggest["Amount"]
-        ))
+        print("Date        :", biggest["Date"])
+        print("Category    :", biggest["Category"])
+        print("Description :", biggest["Description"])
+        print("Amount      : {:.2f}".format(biggest["Amount"]))
 
     elif choice == "4":
         print("Thank you for using Expense Tracker!")
