@@ -1,19 +1,20 @@
 Date,Category,Description,Amount
-2026-11-01,Food,Breakfast,150
-2026-11-02,Travel,Bus fare,100
-2026-11-03,Shopping,Clothes,500
-2026-11-04,Food,Lunch,200
-2026-11-05,Entertainment,Movie ticket,300
-2026-11-06,Travel,Auto fare,80
-2026-11-07,Food,Dinner,120
-2026-11-08,Shopping,Shoes,750
-2026-11-09,Travel,Train ticket,150
-2026-11-10,Food,Snacks,250
-2026-11-11,Entertainment,Game purchase,400
-2026-11-12,Shopping,Accessories,350
-2026-11-13,Food,Breakfast,180
-2026-11-14,Travel,Bus fare,90
-2026-11-15,Entertainment,Event ticket,200
-2026-11-16,Food,Lunch,300
-2026-11-17,Shopping,Backpack,600
-2026-11-18,Travel,Auto fare,120
+2026-11-01,Food,Breakfast,150.0
+2026-11-02,Travel,Bus fare,100.0
+2026-11-03,Shopping,Clothes,500.0
+2026-11-04,Food,Lunch,200.0
+2026-11-05,Entertainment,Movie ticket,300.0
+2026-11-06,Travel,Auto fare,80.0
+2026-11-07,Food,Dinner,120.0
+2026-11-08,Shopping,Shoes,750.0
+2026-11-09,Travel,Train ticket,150.0
+2026-11-10,Food,Snacks,250.0
+2026-11-11,Entertainment,Game purchase,400.0
+2026-11-12,Shopping,Accessories,350.0
+2026-11-13,Food,Breakfast,180.0
+2026-11-14,Travel,Bus fare,90.0
+2026-11-15,Entertainment,Event ticket,200.0
+2026-11-16,Food,Lunch,300.0
+2026-11-17,Shopping,Backpack,600.0
+2026-11-18,Travel,Auto fare,120.0
+2026-11-20,food,Dinner,250.0

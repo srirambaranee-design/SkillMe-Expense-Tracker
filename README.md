@@ -1,26 +1,36 @@
 # Python Expense Tracker
 
-A simple Python-based Expense Tracker developed as part of the SkillMe Python Engineering Internship – Week 1.
+A Python-based Expense Tracker developed as part of the **SkillMe Python Engineering Internship**.
 
 ## Project Description
 
-This program reads expense records from a CSV file and helps users view and analyse their spending through a simple menu.
+This application helps users manage and analyse expenses using Python, CSV files, classes, and separate modules.
 
 ## Features
 
 - Display all expense records
-- Calculate total expenses
-- Calculate spending by category
-- Find the biggest expense
-- Handle invalid menu choices
+- Add new expenses and save them to CSV
+- Load expense records from a CSV file
+- Detect invalid records and count skipped rows
+- Search expenses by description (case-insensitive)
+- Calculate spending totals by category
+- Export category totals to a JSON report
+- Handle invalid menu choices and invalid amount inputs
 
 ## Project Structure
 
 ```text
 SkillMe_Internship/
 ├── main.py
+├── tracker.py
+├── storage.py
+├── report.py
+├── report.json
+├── README.md
 └── data/
-    └── expenses.csv
+    ├── expenses.csv
+    ├── test_expenses.csv
+    └── test_invalid.csv
 ```
 
 ## Requirements
@@ -30,9 +40,9 @@ SkillMe_Internship/
 
 ## How to Run
 
-1. Download or clone this repository.
+1. Clone or download this repository.
 2. Open the project folder in your terminal.
-3. Run the following command:
+3. Run:
 
 ```bash
 py main.py
@@ -40,16 +50,19 @@ py main.py
 
 ## CSV Format
 
-The expense data is stored in `data/expenses.csv` with these columns:
+Expense records are stored in `data/expenses.csv` using these columns:
 
 - Date
 - Category
+- Description
 - Amount
 
 ## Technologies Used
 
 - Python
 - CSV
+- JSON
+- Object-Oriented Programming
 - Git
 - GitHub
 
@@ -57,4 +70,6 @@ The expense data is stored in `data/expenses.csv` with these columns:
 
 **Program:** SkillMe Python Engineering Internship
 
-**Week:** 1 – Read a CSV and Summarise It
+**Week 1:** Read a CSV and Summarise It
+
+**Week 2:** Classes, Modules and Clean Data
