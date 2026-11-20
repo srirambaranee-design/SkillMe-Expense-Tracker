@@ -1,3 +1,4 @@
+
 from report import export_category_report
 from tracker import Expense, ExpenseTracker
 from storage import load_expenses, save_expenses
@@ -29,9 +30,13 @@ while True:
         tracker.show_expenses()
 
     elif choice == "2":
-        date = input("Enter date: ")
-        category = input("Enter category: ")
-        description = input("Enter description: ")
+        date = input("Enter date: ").strip()
+        category = input("Enter category: ").strip().title()
+        description = input("Enter description: ").strip()
+
+        if not date or not category or not description:
+            print("Date, category and description cannot be empty.")
+            continue
 
         try:
             amount = float(input("Enter amount: "))
@@ -46,12 +51,13 @@ while True:
 
         new_expense = Expense(date, category, description, amount)
         tracker.add_expense(new_expense)
+
         save_expenses("data/expenses.csv", tracker.expenses)
 
         print("Expense added and saved successfully!")
 
     elif choice == "3":
-        keyword = input("Enter description to search: ")
+        keyword = input("Enter description to search: ").strip()
         results = tracker.search_expenses(keyword)
 
         if results:

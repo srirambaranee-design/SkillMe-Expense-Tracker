@@ -30,7 +30,7 @@ class ExpenseTracker:
         totals = {}
 
         for expense in self.expenses:
-            category = expense.category
+            category = expense.category.strip().title()
             totals[category] = totals.get(category, 0) + expense.amount
 
         return totals

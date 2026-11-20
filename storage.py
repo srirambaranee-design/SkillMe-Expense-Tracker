@@ -12,7 +12,7 @@ def load_expenses(path):
         for row in reader:
             try:
                 date = row["Date"].strip()
-                category = row["Category"].strip()
+                category = row["Category"].strip().title()
                 description = row["Description"].strip()
                 amount = float(row["Amount"])
 
