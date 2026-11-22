@@ -1,78 +1,107 @@
 
-from report import export_category_report
+import argparse
+import sqlite3
+from datetime import datetime
+
+from db import import_csv
 from tracker import Expense, ExpenseTracker
-from storage import load_expenses, save_expenses
-
-# Create tracker
-tracker = ExpenseTracker()
-
-# Load existing expenses
-expenses, skipped_rows = load_expenses("data/expenses.csv")
-
-for expense in expenses:
-    tracker.add_expense(expense)
-
-print("Expenses loaded:", len(expenses))
-print("Invalid rows skipped:", skipped_rows)
 
 
-while True:
-    print("\n===== EXPENSE TRACKER =====")
-    print("1. Show all expenses")
-    print("2. Add new expense")
-    print("3. Search expenses")
-    print("4. Export category report")
-    print("5. Quit")
+def main():
+    parser = argparse.ArgumentParser(
+        description="Expense Tracker CLI"
+    )
 
-    choice = input("Enter your choice: ")
+    subparsers = parser.add_subparsers(
+        dest="command",
+        required=True
+    )
 
-    if choice == "1":
-        tracker.show_expenses()
+    # Import command
+    import_parser = subparsers.add_parser(
+        "import",
+        help="Import expenses from a CSV file"
+    )
+    import_parser.add_argument("path")
 
-    elif choice == "2":
-        date = input("Enter date: ").strip()
-        category = input("Enter category: ").strip().title()
-        description = input("Enter description: ").strip()
+    # Summary command
+    summary_parser = subparsers.add_parser(
+        "summary",
+        help="Show category-wise expense totals"
+    )
+    summary_parser.add_argument(
+        "--month",
+        help="Filter expenses by month (YYYY-MM)"
+    )
 
-        if not date or not category or not description:
-            print("Date, category and description cannot be empty.")
-            continue
+    # Add command
+    add_parser = subparsers.add_parser(
+        "add",
+        help="Add a new expense"
+    )
+    add_parser.add_argument("--date", required=True)
+    add_parser.add_argument("--category", required=True)
+    add_parser.add_argument("--description", required=True)
+    add_parser.add_argument("--amount", required=True, type=float)
 
-        try:
-            amount = float(input("Enter amount: "))
+    args = parser.parse_args()
 
-            if amount < 0:
-                print("Amount cannot be negative.")
-                continue
+    try:
+        if args.command == "import":
+            import_csv(args.path)
 
-        except ValueError:
-            print("Please enter a valid amount.")
-            continue
+        elif args.command == "summary":
+            if args.month:
+                try:
+                    datetime.strptime(args.month, "%Y-%m")
+                except ValueError:
+                    print("Error: Month must use YYYY-MM format.")
+                    return
 
-        new_expense = Expense(date, category, description, amount)
-        tracker.add_expense(new_expense)
+            tracker = ExpenseTracker()
+            totals = tracker.totals_by_category(args.month)
 
-        save_expenses("data/expenses.csv", tracker.expenses)
+            if not totals:
+                print("No expenses found.")
+                return
 
-        print("Expense added and saved successfully!")
+            print("\n===== EXPENSE SUMMARY =====")
 
-    elif choice == "3":
-        keyword = input("Enter description to search: ").strip()
-        results = tracker.search_expenses(keyword)
+            for category, amount in totals.items():
+                print(f"{category}: ₹{amount:.2f}")
 
-        if results:
-            for expense in results:
-                print(expense)
-        else:
-            print("No matching expenses found.")
+            print("---------------------------")
+            print(f"Total: ₹{sum(totals.values()):.2f}")
 
-    elif choice == "4":
-        totals = tracker.totals_by_category()
-        export_category_report(totals, "report.json")
+        elif args.command == "add":
+            try:
+                datetime.strptime(args.date, "%Y-%m-%d")
+            except ValueError:
+                print("Error: Date must use YYYY-MM-DD format.")
+                return
 
-    elif choice == "5":
-        print("Thank you for using Expense Tracker!")
-        break
+            if not args.category.strip() or not args.description.strip():
+                print("Error: Category and description cannot be empty.")
+                return
 
-    else:
-        print("Invalid choice. Try again.")
+            if args.amount < 0:
+                print("Error: Amount cannot be negative.")
+                return
+
+            expense = Expense(
+                args.date,
+                args.category.strip().title(),
+                args.description.strip(),
+                args.amount
+            )
+
+            tracker = ExpenseTracker()
+            tracker.add_expense(expense)
+            print("Expense added successfully!")
+
+    except sqlite3.Error as error:
+        print("Database error:", error)
+
+
+if __name__ == "__main__":
+    main()

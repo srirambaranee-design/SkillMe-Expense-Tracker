@@ -1,3 +1,7 @@
+
+from db import add_expense, get_all, totals_by_category
+
+
 class Expense:
     def __init__(self, date, category, description, amount):
         self.date = date
@@ -13,39 +17,48 @@ class Expense:
 
 
 class ExpenseTracker:
-    def __init__(self):
-        self.expenses = []
 
     def add_expense(self, expense):
-        self.expenses.append(expense)
+        add_expense(
+            expense.date,
+            expense.category,
+            expense.description,
+            expense.amount
+        )
 
     def show_expenses(self):
-        for expense in self.expenses:
-            print(expense)
+        expenses = get_all()
+
+        for expense in expenses:
+            print(
+                f"{expense[0]} | {expense[1]} | "
+                f"{expense[2]} | ₹{expense[3]:.2f}"
+            )
 
     def total_spent(self):
-        return sum(expense.amount for expense in self.expenses)
+        expenses = get_all()
 
-    def totals_by_category(self):
-        totals = {}
+        return sum(expense[3] for expense in expenses)
 
-        for expense in self.expenses:
-            category = expense.category.strip().title()
-            totals[category] = totals.get(category, 0) + expense.amount
-
-        return totals
+    def totals_by_category(self, month=None):
+        return dict(totals_by_category(month))
 
     def biggest_expense(self):
-        if not self.expenses:
+        expenses = get_all()
+
+        if not expenses:
             return None
 
-        return max(self.expenses, key=lambda expense: expense.amount)
+        biggest = max(expenses, key=lambda expense: expense[3])
+
+        return Expense(*biggest)
 
     def search_expenses(self, keyword):
+        expenses = get_all()
         results = []
 
-        for expense in self.expenses:
-            if keyword.lower() in expense.description.lower():
-                results.append(expense)
+        for expense in expenses:
+            if keyword.lower() in expense[2].lower():
+                results.append(Expense(*expense))
 
         return results
